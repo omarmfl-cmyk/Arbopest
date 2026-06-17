@@ -1,0 +1,29 @@
+name: Daily Arbopest Update
+
+on:
+  schedule:
+    - cron: '0 5 * * *'  # Chaque jour à 6h00 (heure Paris)
+  workflow_dispatch:       # Permet aussi de lancer manuellement
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install requests
+      - name: Run update script
+        run: python update_data.py
+        env:
+          WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}
+      - name: Commit and push
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add index.html
+          git diff --staged --quiet || git commit -m "Daily data update"
+          git push
