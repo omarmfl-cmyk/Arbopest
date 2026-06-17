@@ -86,48 +86,43 @@ body{background:#f0f4f0;min-height:100vh}
   .wv{font-size:18px}.weather-strip{gap:12px}
   .date-bar{justify-content:center}
 }
-.culture-switch{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0 20px;
-  background:#e8f5e9;border-radius:16px;padding:6px;width:100%;box-sizing:border-box}
-.culture-btn{border:none;background:transparent;color:#2e7d32;padding:18px 10px;
-  border-radius:12px;font-size:20px;font-weight:800;cursor:pointer;transition:all .2s;
-  text-align:center;width:100%;box-sizing:border-box}
+
+.culture-switch{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0 20px;background:#e8f5e9;border-radius:16px;padding:6px;width:100%;box-sizing:border-box}
+.culture-btn{border:none;background:transparent;color:#2e7d32;padding:18px 10px;border-radius:12px;font-size:20px;font-weight:800;cursor:pointer;transition:all .2s;text-align:center;width:100%;box-sizing:border-box}
 .culture-btn:hover{background:rgba(46,125,50,0.12)}
-.culture-btn.active{background:linear-gradient(135deg,#1b5e20,#2e7d32,#388e3c);
-  color:#fff;box-shadow:0 4px 16px rgba(46,125,50,0.4)}
+.culture-btn.active{background:linear-gradient(135deg,#1b5e20,#2e7d32,#388e3c);color:#fff;box-shadow:0 4px 16px rgba(46,125,50,0.4)}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>
-  window.addEventListener('load', function() {
-    emailjs.init({ publicKey: 'sxNngSWsCpGpwCwOV' });
-  });
-</script>
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header">
-  <div><div class="logo">🌿 Arbo<span>Pest</span></div></div>
+  <div>
+    <div class="logo">🌿 Arbo<span>Pest</span></div>
+  </div>
   <div class="header-meta">
     <div class="loc">📍 Ouled Gnaou</div>
     <div id="dateLabel" style="margin-top:3px;font-size:12px">📅 —</div>
   </div>
 </div>
 
-<!-- DATE BAR -->
+<!-- DATE PICKER BAR -->
 <div class="date-bar">
   <label for="datePicker">📅 Choisir une date :</label>
   <input type="date" id="datePicker" min="2023-01-01">
-  <button onclick="toggleEmailSettings()" style="
-    background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.5);
-    color:white;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13px;
-    display:inline-flex;align-items:center;gap:6px;margin-right:8px">
-    📧 Alertes Email
-  </button>
+  <button id="emailAlertBtn" onclick="toggleEmailSettings()" style="
+  background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.5);
+  color:white;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13px;
+  display:inline-flex;align-items:center;gap:6px;margin-right:8px">
+  📧 Alertes Email
+</button>
   <button class="refresh-btn" onclick="loadWeather()">🔄 Actualiser</button>
-  <span style="color:rgba(255,255,255,0.6);font-size:11px">DD cumulés depuis Biofix · Base 10°C</span>
+  <span style="color:rgba(255,255,255,0.6);font-size:11px">
+    DD cumulés depuis Biofix · Base 10°C
+  </span>
 </div>
 
-<!-- WEATHER STRIP -->
 <div class="weather-strip">
   <span style="color:rgba(255,255,255,0.6);font-size:10px;text-transform:uppercase;letter-spacing:1px">Météo</span>
   <div class="wm"><div class="wv" id="wTmax"><div class="spinner"></div></div><div class="wl">T° Max</div></div>
@@ -148,7 +143,6 @@ body{background:#f0f4f0;min-height:100vh}
   <div class="src-tag" id="srcTag">Open-Meteo</div>
 </div>
 
-<!-- MAIN -->
 <div class="main">
   <div class="section-title">🦟 Surveillance Ravageurs — Agrumes &amp; Grenadier</div>
   <div class="culture-switch">
@@ -158,7 +152,6 @@ body{background:#f0f4f0;min-height:100vh}
   <div class="cards-grid" id="cardsGrid"></div>
 </div>
 
-<!-- ONSSA MODAL -->
 <div class="modal-overlay" id="onssa-modal">
   <div class="modal-box">
     <div class="mhead">
@@ -181,100 +174,62 @@ body{background:#f0f4f0;min-height:100vh}
   </div>
 </div>
 
-<!-- EMAIL MODAL -->
-<div id="emailModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;
-  background:rgba(0,0,0,0.5);z-index:10000;align-items:center;justify-content:center">
-  <div style="background:white;border-radius:16px;padding:28px;max-width:440px;width:90%;
-    box-shadow:0 20px 60px rgba(0,0,0,0.3);max-height:90vh;overflow-y:auto">
-    <h3 style="color:#1a5c2a;margin-bottom:16px;font-size:18px">📧 Alertes Email</h3>
-
-    <label style="display:block;margin-bottom:8px;font-size:13px;color:#555;font-weight:600">Emails destinataires</label>
-    <div id="emailList" style="margin-bottom:8px;display:flex;flex-direction:column;gap:6px">
-      <div class="email-row" style="display:flex;gap:6px;align-items:center">
-        <input type="email" class="email-input" value="omarmflh3@gmail.com"
-          style="flex:1;padding:9px;border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none"
-          placeholder="email@gmail.com"/>
-        <button onclick="removeEmail(this)" style="background:#ffebee;border:none;color:#c62828;
-          width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:16px;flex-shrink:0">×</button>
-      </div>
-    </div>
-    <button onclick="addEmailField()" style="width:100%;background:#e8f5e9;color:#1a5c2a;
-      border:1px dashed #a5d6a7;padding:8px;border-radius:8px;cursor:pointer;font-size:13px;margin-bottom:16px">
-      ➕ Ajouter un email
-    </button>
-
-    <label style="display:block;margin-bottom:8px;font-size:13px;color:#555;font-weight:600">Envoyer alertes pour</label>
-    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px" id="alertCheckboxes">
-      <label style="display:flex;align-items:center;gap:4px;font-size:12px;background:#f0f4f0;padding:6px 10px;border-radius:20px;cursor:pointer"><input type="checkbox" checked value="Acariens"> 🕷️ Acariens</label>
-      <label style="display:flex;align-items:center;gap:4px;font-size:12px;background:#f0f4f0;padding:6px 10px;border-radius:20px;cursor:pointer"><input type="checkbox" checked value="Thrips"> 🦗 Thrips</label>
-      <label style="display:flex;align-items:center;gap:4px;font-size:12px;background:#f0f4f0;padding:6px 10px;border-radius:20px;cursor:pointer"><input type="checkbox" checked value="Cochenilles"> 🔴 Cochenilles</label>
-      <label style="display:flex;align-items:center;gap:4px;font-size:12px;background:#f0f4f0;padding:6px 10px;border-radius:20px;cursor:pointer"><input type="checkbox" checked value="Ceratitis"> 🦟 Ceratitis</label>
-      <label style="display:flex;align-items:center;gap:4px;font-size:12px;background:#f0f4f0;padding:6px 10px;border-radius:20px;cursor:pointer"><input type="checkbox" checked value="Escargots"> 🐌 Escargots</label>
-      <label style="display:flex;align-items:center;gap:4px;font-size:12px;background:#f0f4f0;padding:6px 10px;border-radius:20px;cursor:pointer"><input type="checkbox" checked value="Pyrale"> 🦋 Pyrale</label>
-      <label style="display:flex;align-items:center;gap:4px;font-size:12px;background:#f0f4f0;padding:6px 10px;border-radius:20px;cursor:pointer"><input type="checkbox" checked value="Alternaria"> 🍂 Alternaria</label>
-    </div>
-
-    <!-- TEST EMAIL BUTTON -->
-    <button onclick="testEmail()" style="width:100%;background:linear-gradient(135deg,#e65100,#f57c00);
-      color:white;border:none;padding:11px;border-radius:10px;cursor:pointer;
-      font-weight:700;margin-bottom:10px;font-size:13px">
-      🧪 Tester l'envoi email
-    </button>
-
-    <div style="display:flex;gap:10px">
-      <button onclick="saveEmailSettings()" style="flex:1;background:linear-gradient(135deg,#1b5e20,#2e7d32);
-        color:white;border:none;padding:11px;border-radius:10px;cursor:pointer;font-weight:700;font-size:13px">
-        💾 Sauvegarder
-      </button>
-      <button onclick="document.getElementById('emailModal').style.display='none'"
-        style="flex:1;background:#f5f5f5;color:#555;border:none;padding:11px;border-radius:10px;cursor:pointer;font-size:13px">
-        Annuler
-      </button>
-    </div>
-  </div>
-</div>
-
 <script>
-// ── DATA ──
-const ONSSA = {
-  "Acariens":[{"nom":"ACRAMITE 480 SC","ma":"Bifenazate","teneur":"480 g/l","categorie":"Acaricide","detenteur":"ADAMA MAROC","validite":"2027"},{"nom":"APOLLO 50 SC","ma":"Clofentezine","teneur":"500 g/l","categorie":"Acaricide","detenteur":"AGRI MAROC","validite":"2026"},{"nom":"ENVIDOR 24 SC","ma":"Spirodiclofen","teneur":"240 g/l","categorie":"Acaricide","detenteur":"BAYER MAROC","validite":"2028"},{"nom":"MAGISTER 20 SC","ma":"Fenazaquin","teneur":"200 g/l","categorie":"Acaricide","detenteur":"SIPCAM MAROC","validite":"2027"},{"nom":"NISSORUN 10 WP","ma":"Hexythiazox","teneur":"10%","categorie":"Acaricide","detenteur":"NIPPON SODA","validite":"2026"},{"nom":"OMITE 57 E","ma":"Propargite","teneur":"570 g/l","categorie":"Acaricide","detenteur":"UNIROYAL","validite":"2026"},{"nom":"SAVEY 50 WG","ma":"Hexythiazox","teneur":"50%","categorie":"Acaricide","detenteur":"GOWAN","validite":"2027"},{"nom":"VERTIMEC 1.8 EC","ma":"Abamectine","teneur":"18 g/l","categorie":"Acaricide/Insecticide","detenteur":"SYNGENTA MAROC","validite":"2028"}],
-  "Thrips":[{"nom":"ACTARA 25 WG","ma":"Thiamethoxam","teneur":"25%","categorie":"Insecticide","detenteur":"SYNGENTA MAROC","validite":"2028"},{"nom":"ADMIRAL 10 EC","ma":"Pyriproxyfen","teneur":"100 g/l","categorie":"Insecticide/IGR","detenteur":"NIPPON SODA","validite":"2027"},{"nom":"AGROIL","ma":"Huile minérale","teneur":"83%","categorie":"Insecticide","detenteur":"AGRI SERVICE","validite":"2027"},{"nom":"CALYPSO 480 SC","ma":"Thiaclopride","teneur":"480 g/l","categorie":"Insecticide","detenteur":"BAYER MAROC","validite":"2026"},{"nom":"CONFIDOR 200 SL","ma":"Imidaclopride","teneur":"200 g/l","categorie":"Insecticide","detenteur":"BAYER MAROC","validite":"2027"},{"nom":"DELEGATE 250 WG","ma":"Spinetoram","teneur":"25%","categorie":"Insecticide","detenteur":"DOW AGROSCIENCES","validite":"2028"},{"nom":"MOVENTO 150 OD","ma":"Spirotetramate","teneur":"150 g/l","categorie":"Insecticide","detenteur":"BAYER MAROC","validite":"2028"},{"nom":"SPINTOR 480 SC","ma":"Spinosad","teneur":"480 g/l","categorie":"Insecticide","detenteur":"DOW AGROSCIENCES","validite":"2027"}],
-  "Cochenilles":[{"nom":"MOVENTO 150 OD","ma":"Spirotetramate","teneur":"150 g/l","categorie":"Insecticide","detenteur":"BAYER MAROC","validite":"2028"},{"nom":"AGROIL","ma":"Huile minérale","teneur":"83%","categorie":"Insecticide","detenteur":"AGRI SERVICE","validite":"2027"},{"nom":"CONFIDOR 200 SL","ma":"Imidaclopride","teneur":"200 g/l","categorie":"Insecticide","detenteur":"BAYER MAROC","validite":"2027"},{"nom":"APPLAUD 25 SC","ma":"Buprofézine","teneur":"250 g/l","categorie":"Insecticide/IGR","detenteur":"NIPPON SODA","validite":"2026"},{"nom":"CYTHRIN MAX 500 EC","ma":"Cyperméthrine","teneur":"500 g/l","categorie":"Insecticide","detenteur":"FMC MAROC","validite":"2027"},{"nom":"PYRISTAR 100 EC","ma":"Pyriproxyfen","teneur":"100 g/l","categorie":"IGR","detenteur":"AGROPHARM","validite":"2026"},{"nom":"TALSTAR ONE","ma":"Bifenthrine","teneur":"80 g/l","categorie":"Insecticide","detenteur":"FMC MAROC","validite":"2027"}],
-  "Ceratitis":[{"nom":"MALATHION 50 EC","ma":"Malathion","teneur":"500 g/l","categorie":"Insecticide","detenteur":"SUMI AGRO","validite":"2026"},{"nom":"SPINTOR 480 SC","ma":"Spinosad","teneur":"480 g/l","categorie":"Insecticide","detenteur":"DOW AGROSCIENCES","validite":"2027"},{"nom":"KARATE 5 EC","ma":"Lambda-cyhalothrine","teneur":"50 g/l","categorie":"Insecticide","detenteur":"SYNGENTA MAROC","validite":"2027"},{"nom":"SUCCESS 0.24 CB","ma":"Spinosad","teneur":"0.24 g/l","categorie":"Insecticide","detenteur":"DOW AGROSCIENCES","validite":"2026"},{"nom":"DURSBAN 4 EC","ma":"Chlorpyrifos éthyl","teneur":"480 g/l","categorie":"Insecticide","detenteur":"DOW AGROSCIENCES","validite":"2026"},{"nom":"IMIDAN 50 WP","ma":"Phosmet","teneur":"50%","categorie":"Insecticide","detenteur":"GOWAN","validite":"2027"}],
-  "Alternaria":[{"nom":"SCORE 250 EC","ma":"Difénoconazole","teneur":"250 g/l","categorie":"Fongicide","detenteur":"SYNGENTA MAROC","validite":"2028"},{"nom":"SWITCH 62.5 WG","ma":"Cyprodinile + Fludioxonile","teneur":"37.5% + 25%","categorie":"Fongicide","detenteur":"SYNGENTA MAROC","validite":"2027"},{"nom":"MANZATE 80 WP","ma":"Mancozèbe","teneur":"80%","categorie":"Fongicide","detenteur":"DUPONT MAROC","validite":"2026"},{"nom":"THIRAM GRANUFLO","ma":"Thirame","teneur":"80%","categorie":"Fongicide","detenteur":"NUFARM","validite":"2026"},{"nom":"DITHANE M45","ma":"Mancozèbe","teneur":"80%","categorie":"Fongicide","detenteur":"DOW AGROSCIENCES","validite":"2027"},{"nom":"IPRODIONE 50 SC","ma":"Iprodione","teneur":"500 g/l","categorie":"Fongicide","detenteur":"ADAMA MAROC","validite":"2026"},{"nom":"ROVRAL 50 WP","ma":"Iprodione","teneur":"50%","categorie":"Fongicide","detenteur":"BAYER MAROC","validite":"2026"}],
-  "Pyrale":[{"nom":"KARATE 5 EC","ma":"Lambda-cyhalothrine","teneur":"50 g/l","categorie":"Insecticide","detenteur":"SYNGENTA MAROC","validite":"2027"},{"nom":"CORAGEN 20 SC","ma":"Chlorantraniliprole","teneur":"200 g/l","categorie":"Insecticide","detenteur":"DUPONT MAROC","validite":"2028"},{"nom":"AFFIRM 095 SG","ma":"Emamectine benzoate","teneur":"9.5 g/kg","categorie":"Insecticide","detenteur":"SYNGENTA MAROC","validite":"2027"},{"nom":"BELT 480 SC","ma":"Flubendiamide","teneur":"480 g/l","categorie":"Insecticide","detenteur":"BAYER MAROC","validite":"2027"},{"nom":"MATCH 050 EC","ma":"Lufénuron","teneur":"50 g/l","categorie":"Insecticide/IGR","detenteur":"SYNGENTA MAROC","validite":"2026"},{"nom":"VOLIAM TARGO 063 SC","ma":"Chlorantraniliprole + Abamectine","teneur":"45 + 18 g/l","categorie":"Insecticide","detenteur":"SYNGENTA MAROC","validite":"2028"}]
-};
-
+const ONSSA = {"Acariens": [{"nom": "ACRAMITE 480 SC", "ma": "Bifenazate", "teneur": "480 g/l", "categorie": "Acaricide", "detenteur": "ADAMA MAROC", "validite": "2027"}, {"nom": "APOLLO 50 SC", "ma": "Clofentezine", "teneur": "500 g/l", "categorie": "Acaricide", "detenteur": "AGRI MAROC", "validite": "2026"}, {"nom": "ENVIDOR 24 SC", "ma": "Spirodiclofen", "teneur": "240 g/l", "categorie": "Acaricide", "detenteur": "BAYER MAROC", "validite": "2028"}, {"nom": "MAGISTER 20 SC", "ma": "Fenazaquin", "teneur": "200 g/l", "categorie": "Acaricide", "detenteur": "SIPCAM MAROC", "validite": "2027"}, {"nom": "NISSORUN 10 WP", "ma": "Hexythiazox", "teneur": "10%", "categorie": "Acaricide", "detenteur": "NIPPON SODA", "validite": "2026"}, {"nom": "OMITE 57 E", "ma": "Propargite", "teneur": "570 g/l", "categorie": "Acaricide", "detenteur": "UNIROYAL", "validite": "2026"}, {"nom": "SAVEY 50 WG", "ma": "Hexythiazox", "teneur": "50%", "categorie": "Acaricide", "detenteur": "GOWAN", "validite": "2027"}, {"nom": "VERTIMEC 1.8 EC", "ma": "Abamectine", "teneur": "18 g/l", "categorie": "Acaricide/Insecticide", "detenteur": "SYNGENTA MAROC", "validite": "2028"}], "Thrips": [{"nom": "ACTARA 25 WG", "ma": "Thiamethoxam", "teneur": "25%", "categorie": "Insecticide", "detenteur": "SYNGENTA MAROC", "validite": "2028"}, {"nom": "ADMIRAL 10 EC", "ma": "Pyriproxyfen", "teneur": "100 g/l", "categorie": "Insecticide/IGR", "detenteur": "NIPPON SODA", "validite": "2027"}, {"nom": "AGROIL", "ma": "Huile minérale", "teneur": "83%", "categorie": "Insecticide", "detenteur": "AGRI SERVICE", "validite": "2027"}, {"nom": "CALYPSO 480 SC", "ma": "Thiaclopride", "teneur": "480 g/l", "categorie": "Insecticide", "detenteur": "BAYER MAROC", "validite": "2026"}, {"nom": "CONFIDOR 200 SL", "ma": "Imidaclopride", "teneur": "200 g/l", "categorie": "Insecticide", "detenteur": "BAYER MAROC", "validite": "2027"}, {"nom": "DELEGATE 250 WG", "ma": "Spinetoram", "teneur": "25%", "categorie": "Insecticide", "detenteur": "DOW AGROSCIENCES", "validite": "2028"}, {"nom": "MOVENTO 150 OD", "ma": "Spirotetramate", "teneur": "150 g/l", "categorie": "Insecticide", "detenteur": "BAYER MAROC", "validite": "2028"}, {"nom": "SPINTOR 480 SC", "ma": "Spinosad", "teneur": "480 g/l", "categorie": "Insecticide", "detenteur": "DOW AGROSCIENCES", "validite": "2027"}], "Cochenilles": [{"nom": "MOVENTO 150 OD", "ma": "Spirotetramate", "teneur": "150 g/l", "categorie": "Insecticide", "detenteur": "BAYER MAROC", "validite": "2028"}, {"nom": "AGROIL", "ma": "Huile minérale", "teneur": "83%", "categorie": "Insecticide", "detenteur": "AGRI SERVICE", "validite": "2027"}, {"nom": "CONFIDOR 200 SL", "ma": "Imidaclopride", "teneur": "200 g/l", "categorie": "Insecticide", "detenteur": "BAYER MAROC", "validite": "2027"}, {"nom": "APPLAUD 25 SC", "ma": "Buprofézine", "teneur": "250 g/l", "categorie": "Insecticide/IGR", "detenteur": "NIPPON SODA", "validite": "2026"}, {"nom": "CYTHRIN MAX 500 EC", "ma": "Cyperméthrine", "teneur": "500 g/l", "categorie": "Insecticide", "detenteur": "FMC MAROC", "validite": "2027"}, {"nom": "PYRISTAR 100 EC", "ma": "Pyriproxyfen", "teneur": "100 g/l", "categorie": "IGR", "detenteur": "AGROPHARM", "validite": "2026"}, {"nom": "TALSTAR ONE", "ma": "Bifenthrine", "teneur": "80 g/l", "categorie": "Insecticide", "detenteur": "FMC MAROC", "validite": "2027"}], "Ceratitis": [{"nom": "MALATHION 50 EC", "ma": "Malathion", "teneur": "500 g/l", "categorie": "Insecticide", "detenteur": "SUMI AGRO", "validite": "2026"}, {"nom": "SPINTOR 480 SC", "ma": "Spinosad", "teneur": "480 g/l", "categorie": "Insecticide", "detenteur": "DOW AGROSCIENCES", "validite": "2027"}, {"nom": "KARATE 5 EC", "ma": "Lambda-cyhalothrine", "teneur": "50 g/l", "categorie": "Insecticide", "detenteur": "SYNGENTA MAROC", "validite": "2027"}, {"nom": "SUCCESS 0.24 CB", "ma": "Spinosad", "teneur": "0.24 g/l", "categorie": "Insecticide", "detenteur": "DOW AGROSCIENCES", "validite": "2026"}, {"nom": "DURSBAN 4 EC", "ma": "Chlorpyrifos éthyl", "teneur": "480 g/l", "categorie": "Insecticide", "detenteur": "DOW AGROSCIENCES", "validite": "2026"}, {"nom": "IMIDAN 50 WP", "ma": "Phosmet", "teneur": "50%", "categorie": "Insecticide", "detenteur": "GOWAN", "validite": "2027"}], "Alternaria": [{"nom": "SCORE 250 EC", "ma": "Difénoconazole", "teneur": "250 g/l", "categorie": "Fongicide", "detenteur": "SYNGENTA MAROC", "validite": "2028"}, {"nom": "SWITCH 62.5 WG", "ma": "Cyprodinile + Fludioxonile", "teneur": "37.5% + 25%", "categorie": "Fongicide", "detenteur": "SYNGENTA MAROC", "validite": "2027"}, {"nom": "MANZATE 80 WP", "ma": "Mancozèbe", "teneur": "80%", "categorie": "Fongicide", "detenteur": "DUPONT MAROC", "validite": "2026"}, {"nom": "THIRAM GRANUFLO", "ma": "Thirame", "teneur": "80%", "categorie": "Fongicide", "detenteur": "NUFARM", "validite": "2026"}, {"nom": "DITHANE M45", "ma": "Mancozèbe", "teneur": "80%", "categorie": "Fongicide", "detenteur": "DOW AGROSCIENCES", "validite": "2027"}, {"nom": "IPRODIONE 50 SC", "ma": "Iprodione", "teneur": "500 g/l", "categorie": "Fongicide", "detenteur": "ADAMA MAROC", "validite": "2026"}, {"nom": "ROVRAL 50 WP", "ma": "Iprodione", "teneur": "50%", "categorie": "Fongicide", "detenteur": "BAYER MAROC", "validite": "2026"}], "Pyrale": [{"nom": "KARATE 5 EC", "ma": "Lambda-cyhalothrine", "teneur": "50 g/l", "categorie": "Insecticide", "detenteur": "SYNGENTA MAROC", "validite": "2027"}, {"nom": "CORAGEN 20 SC", "ma": "Chlorantraniliprole", "teneur": "200 g/l", "categorie": "Insecticide", "detenteur": "DUPONT MAROC", "validite": "2028"}, {"nom": "AFFIRM 095 SG", "ma": "Emamectine benzoate", "teneur": "9.5 g/kg", "categorie": "Insecticide", "detenteur": "SYNGENTA MAROC", "validite": "2027"}, {"nom": "BELT 480 SC", "ma": "Flubendiamide", "teneur": "480 g/l", "categorie": "Insecticide", "detenteur": "BAYER MAROC", "validite": "2027"}, {"nom": "MATCH 050 EC", "ma": "Lufénuron", "teneur": "50 g/l", "categorie": "Insecticide/IGR", "detenteur": "SYNGENTA MAROC", "validite": "2026"}, {"nom": "VOLIAM TARGO 063 SC", "ma": "Chlorantraniliprole + Abamectine", "teneur": "45 + 18 g/l", "categorie": "Insecticide", "detenteur": "SYNGENTA MAROC", "validite": "2028"}]};
 const CUR_YEAR = new Date().getFullYear();
 const LAT = 32.45, LON = -6.78;
-const BIOFIX_AGRUMES   = new Date(CUR_YEAR + "-03-01");
-const BIOFIX_GRENADIER = new Date(CUR_YEAR + "-03-15");
+// Biofix convention ONCA/IAV Maroc
+const BIOFIX_AGRUMES   = new Date(CUR_YEAR + "-03-01");  // 1er mars — agrumes
+const BIOFIX_GRENADIER = new Date(CUR_YEAR + "-03-15");  // 15 mars — grenadier
+// BIOFIX is computed per-call in loadWeather based on currentCulture
 
-const RAVAGEURS = {
+window.RAVAGEURS = window.RAVAGEURS || {};
+const RAVAGEURS = window.RAVAGEURS = {
   agrumes: [
-    {id:'Acariens',icon:'🕷️',sci:'Panonychus citri / Tetranychus urticae',culture:'Agrumes',organe:'Feuilles/Fruits',seuil:'5 acariens/feuille',dd:[562,1124,1686],tbase:8.3,symp:'Piqûres argentées, feuilles bronzées, toiles fines',
-     aux:[{nom:'Phytoseiulus persimilis',tmin:18,tmax:30,hrmin:60,doseBase:20,unite:'individus/m²',sachet:'500 ind.',dispo:'Spidex® Koppert Maroc',delai:14},{nom:'Neoseiulus californicus',tmin:15,tmax:32,hrmin:40,doseBase:25,unite:'individus/m²',sachet:'2000 ind.',dispo:'Spical® Koppert Maroc',delai:14}]},
-    {id:'Thrips',icon:'🦗',sci:'Scirtothrips citri',culture:'Agrumes',organe:'Fleurs/Fruits/Feuilles',seuil:'1 thrips/fleur',dd:[125,250,375],tbase:14.5,symp:'Cicatrices liégeuses argentées, déformation florale, fruits marqués',
-     aux:[{nom:'Amblyseius swirskii',tmin:20,tmax:38,hrmin:50,doseBase:50,unite:'individus/m²',sachet:'1000 ind.',dispo:'Swirski-Mite® Koppert Maroc',delai:7},{nom:'Neoseiulus cucumeris',tmin:15,tmax:28,hrmin:55,doseBase:50,unite:'individus/m²',sachet:'1000 ind.',dispo:'Thripex® Koppert Maroc',delai:7}]},
-    {id:'Cochenilles',icon:'🔴',sci:'Aonidiella aurantii',culture:'Agrumes',organe:'Fruits/Rameaux/Feuilles',seuil:'10% rameaux infestés',dd:[612,1224,1836],tbase:11.7,symp:'Boucliers bruns circulaires, miellat collant, fumagine noire',
-     aux:[{nom:'Aphytis melinus',tmin:20,tmax:34,hrmin:40,doseBase:10000,unite:'individus/arbre',sachet:'500 ind.',dispo:'Aphytis® Biobest Maroc',delai:21},{nom:'Cryptolaemus montrouzieri',tmin:20,tmax:32,hrmin:45,doseBase:5,unite:'individus/m²',sachet:'100 ind.',dispo:'Cryptobug® Koppert Maroc',delai:14}]},
-    {id:'Ceratitis',icon:'🦟',sci:'Ceratitis capitata',culture:'Agrumes',organe:'Fruits',seuil:'1 mouche/piège/jour',dd:[373,746,1119],tbase:10.2,symp:'Piqûres ponte sur peau, pourriture interne, chute prématurée',
-     aux:[{nom:'Spinosad GF-120 Naturalys®',tmin:10,tmax:40,hrmin:0,doseBase:0.3,unite:'L/arbre',sachet:'1L',dispo:'Naturalys® Corteva Maroc',delai:0},{nom:'Fopius arisanus',tmin:20,tmax:30,hrmin:50,doseBase:null,unite:'Lâcher professionnel',sachet:'-',dispo:'Non commercialisé Maroc',delai:7}]},
-    {id:'Escargots',icon:'🐌',sci:'Theba pisana',culture:'Agrumes',organe:'Tronc/Feuilles/Fruits/Rameaux',seuil:'Surveillance après pluie >10mm',dd:[],symp:'Traces mucus brillant, écorce rongée tronc, morsures fruits',
-     aux:[{nom:'Rumina decollata',tmin:10,tmax:30,hrmin:60,doseBase:8,unite:'individus/m²',sachet:'50 ind.',dispo:'Conservation naturelle',delai:3},{nom:'Phasmarhabditis hermaphrodita',tmin:5,tmax:20,hrmin:80,doseBase:3000000,unite:'nématodes/m²',sachet:'50M nématodes',dispo:'Nemaslug® (importation)',delai:3}]}
+    {id:'Acariens', icon:'🕷️', sci:'Panonychus citri / Tetranychus urticae', culture:'Agrumes', organe:'Feuilles/Fruits', seuil:'5 acariens/feuille', dd:[562,1124,1686], tbase:8.3, symp:'Piqûres argentées, feuilles bronzées, toiles fines',
+     aux:[
+       {nom:'Phytoseiulus persimilis', tmin:18, tmax:30, hrmin:60, doseBase:20, unite:'individus/m²', sachet:'500 ind.', dispo:'Spidex® Koppert Maroc', delai:14},
+       {nom:'Neoseiulus californicus', tmin:15, tmax:32, hrmin:40, doseBase:25, unite:'individus/m²', sachet:'2000 ind.', dispo:'Spical® Koppert Maroc', delai:14}
+     ]},
+    {id:'Thrips', icon:'🦗', sci:'Scirtothrips citri', culture:'Agrumes', organe:'Fleurs/Fruits/Feuilles', seuil:'1 thrips/fleur', dd:[125,250,375], tbase:14.5, symp:'Cicatrices liégeuses argentées, déformation florale, fruits marqués',
+     aux:[
+       {nom:'Amblyseius swirskii', tmin:20, tmax:38, hrmin:50, doseBase:50, unite:'individus/m²', sachet:'1000 ind.', dispo:'Swirski-Mite® Koppert Maroc', delai:7},
+       {nom:'Neoseiulus cucumeris', tmin:15, tmax:28, hrmin:55, doseBase:50, unite:'individus/m²', sachet:'1000 ind.', dispo:'Thripex® Koppert Maroc', delai:7}
+     ]},
+    {id:'Cochenilles', icon:'🔴', sci:'Aonidiella aurantii', culture:'Agrumes', organe:'Fruits/Rameaux/Feuilles', seuil:'10% rameaux infestés', dd:[612,1224,1836], tbase:11.7, symp:'Boucliers bruns circulaires, miellat collant, fumagine noire',
+     aux:[
+       {nom:'Aphytis melinus', tmin:20, tmax:34, hrmin:40, doseBase:10000, unite:'individus/arbre', sachet:'500 ind.', dispo:'Aphytis® Biobest Maroc', delai:21},
+       {nom:'Cryptolaemus montrouzieri', tmin:20, tmax:32, hrmin:45, doseBase:5, unite:'individus/m²', sachet:'100 ind.', dispo:'Cryptobug® Koppert Maroc', delai:14}
+     ]},
+    {id:'Ceratitis', icon:'🦟', sci:'Ceratitis capitata', culture:'Agrumes', organe:'Fruits', seuil:'1 mouche/piège/jour', dd:[373,746,1119], tbase:10.2, symp:'Piqûres ponte sur peau, pourriture interne, chute prématurée',
+     aux:[
+       {nom:'Spinosad GF-120 Naturalys®', tmin:10, tmax:40, hrmin:0, doseBase:0.3, unite:'L/arbre', sachet:'1L', dispo:'Naturalys® Corteva Maroc', delai:0},
+       {nom:'Fopius arisanus', tmin:20, tmax:30, hrmin:50, doseBase:null, unite:'Lâcher professionnel', sachet:'-', dispo:'Non commercialisé Maroc', delai:7}
+     ]},
+    {id:'Escargots', icon:'🐌', sci:'Theba pisana', culture:'Agrumes', organe:'Tronc/Feuilles/Fruits/Rameaux', seuil:'Surveillance après pluie >10mm', dd:[], symp:'Traces mucus brillant, écorce rongée tronc, morsures fruits',
+     aux:[
+       {nom:'Rumina decollata', tmin:10, tmax:30, hrmin:60, doseBase:8, unite:'individus/m²', sachet:'50 ind.', dispo:'Conservation naturelle', delai:3},
+       {nom:'Phasmarhabditis hermaphrodita', tmin:5, tmax:20, hrmin:80, doseBase:3000000, unite:'nématodes/m²', sachet:'50M nématodes', dispo:'Nemaslug® (importation)', delai:3}
+     ]}
   ],
   grenadier: [
-    {id:'Ceratitis',icon:'🦟',sci:'Ceratitis capitata',culture:'Grenadier',organe:'Fruits',seuil:'2 mouches/piège/jour',dd:[373,746,1119],tbase:10.2,symp:'Piqûres peau calice, larves dans arilles, contamination Botrytis secondaire',
-     aux:[{nom:'Spinosad GF-120 Naturalys®',tmin:10,tmax:40,hrmin:0,doseBase:0.3,unite:'L/arbre',sachet:'1L',dispo:'Naturalys® Corteva Maroc',delai:0},{nom:'Fopius arisanus',tmin:20,tmax:30,hrmin:50,doseBase:null,unite:'Lâcher professionnel',sachet:'-',dispo:'Non commercialisé Maroc',delai:7}]},
-    {id:'Pyrale',icon:'🦋',sci:'Ectomyelois ceratoniae',culture:'Grenadier',organe:'Fruits',seuil:'1 larve/fruit sur 5 fruits',dd:[831,1662,2493],tbase:4.8,symp:'Galeries internes arilles, déjections brunes calice, pourriture interne',
-     aux:[{nom:'Trichogramma cacoeciae',tmin:18,tmax:32,hrmin:40,doseBase:150000,unite:'oeufs/ha',sachet:'Trichocard 500k oeufs',dispo:'Trichocards® Koppert Maroc',delai:7},{nom:'Steinernema carpocapsae',tmin:14,tmax:28,hrmin:80,doseBase:1000000,unite:'nématodes/m²',sachet:'Capsanem® 50M',dispo:'Capsanem® Koppert Maroc',delai:3}]},
-    {id:'Alternaria',icon:'🍂',sci:'Alternaria alternata/granati',culture:'Grenadier',organe:'Fleurs/Fruits/Feuilles',seuil:'Modèle Alter-Rater',dd:[],symp:'Taches noires fleurs, pourriture coeur noir fruit, chute',
-     aux:[{nom:'Trichoderma harzianum',tmin:15,tmax:30,hrmin:50,doseBase:2,unite:'g/L pulv.',sachet:'Trianum-P® 100g',dispo:'Trianum-P® Koppert Maroc',delai:3},{nom:'Bacillus subtilis',tmin:10,tmax:35,hrmin:40,doseBase:3,unite:'g/L pulv.',sachet:'Microflora® 1kg',dispo:'Microflora® Koppert Maroc',delai:3}]}
+    {id:'Ceratitis', icon:'🦟', sci:'Ceratitis capitata', culture:'Grenadier', organe:'Fruits', seuil:'2 mouches/piège/jour', dd:[373,746,1119], tbase:10.2, symp:'Piqûres peau calice, larves dans arilles, contamination Botrytis secondaire',
+     aux:[
+       {nom:'Spinosad GF-120 Naturalys®', tmin:10, tmax:40, hrmin:0, doseBase:0.3, unite:'L/arbre', sachet:'1L', dispo:'Naturalys® Corteva Maroc', delai:0},
+       {nom:'Fopius arisanus', tmin:20, tmax:30, hrmin:50, doseBase:null, unite:'Lâcher professionnel', sachet:'-', dispo:'Non commercialisé Maroc', delai:7}
+     ]},
+    {id:'Pyrale', icon:'🦋', sci:'Ectomyelois ceratoniae', culture:'Grenadier', organe:'Fruits', seuil:'1 larve/fruit sur 5 fruits', dd:[831,1662,2493], tbase:4.8, symp:'Galeries internes arilles, déjections brunes calice, pourriture interne',
+     aux:[
+       {nom:'Trichogramma cacoeciae', tmin:18, tmax:32, hrmin:40, doseBase:150000, unite:'oeufs/ha', sachet:'Trichocard 500k oeufs', dispo:'Trichocards® Koppert Maroc', delai:7},
+       {nom:'Steinernema carpocapsae', tmin:14, tmax:28, hrmin:80, doseBase:1000000, unite:'nématodes/m²', sachet:'Capsanem® 50M', dispo:'Capsanem® Koppert Maroc', delai:3}
+     ]},
+    {id:'Alternaria', icon:'🍂', sci:'Alternaria alternata/granati', culture:'Grenadier', organe:'Fleurs/Fruits/Feuilles', seuil:'Modèle Alter-Rater', dd:[], symp:'Taches noires fleurs, pourriture coeur noir fruit, chute',
+     aux:[
+       {nom:'Trichoderma harzianum', tmin:15, tmax:30, hrmin:50, doseBase:2, unite:'g/L pulv.', sachet:'Trianum-P® 100g', dispo:'Trianum-P® Koppert Maroc', delai:3},
+       {nom:'Bacillus subtilis', tmin:10, tmax:35, hrmin:40, doseBase:3, unite:'g/L pulv.', sachet:'Microflora® 1kg', dispo:'Microflora® Koppert Maroc', delai:3}
+     ]}
   ]
 };
-
-// ── UTILS ──
-let currentCulture = 'agrumes';
 
 function setDate(dateStr) {
   const d = dateStr ? new Date(dateStr) : new Date();
@@ -282,132 +237,184 @@ function setDate(dateStr) {
     d.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
 }
 
+
+let currentCulture = 'agrumes';
+
 function switchCulture(culture) {
   currentCulture = culture;
-  document.getElementById('btnAgrumes').classList.toggle('active', culture==='agrumes');
-  document.getElementById('btnGrenadier').classList.toggle('active', culture==='grenadier');
-  loadWeather();
+  document.getElementById('btnAgrumes').classList.toggle('active', culture === 'agrumes');
+  document.getElementById('btnGrenadier').classList.toggle('active', culture === 'grenadier');
+  loadWeather(); // recalculate DD with correct biofix for this culture
 }
 
-// ── ALTERNARIA MODEL ──
 function computeAlternariaRisk(tmaxs, tmins, humids, precips, wetHours, n) {
-  const T_MIN=12.5, T_MAX=28.0, T_OPT=26.0, PLUIE_SEUIL=2.5, WET_SEUIL=2.0;
-  const risk={level:0,label:'Faible',days:0,details:[]};
-  const check=Math.min(3,n);
-  for(let i=n-check;i<n;i++){
-    const tmoy=(tmaxs[i]+tmins[i])/2;
-    const pluie=precips[i]||0, wet=wetHours[i]||0, hr=humids[i]||0;
-    const tOk=tmoy>=T_MIN&&tmoy<=T_MAX, plOk=pluie>=PLUIE_SEUIL, wOk=wet>=WET_SEUIL;
-    const triggered=tOk&&plOk&&wOk;
-    let tScore=0;
-    if(tOk){tScore=tmoy<=T_OPT?(tmoy-T_MIN)/(T_OPT-T_MIN):(T_MAX-tmoy)/(T_MAX-T_OPT);tScore=Math.max(0,Math.min(1,tScore));}
-    const wScore=triggered?Math.min(1,wet/12):0;
-    const severity=triggered?Math.round((tScore*0.6+wScore*0.4)*100):0;
-    if(triggered)risk.days++;
-    risk.details.push({tmoy:tmoy.toFixed(1),hr:Math.round(hr),pluie:pluie.toFixed(1),wet:wet.toFixed(1),tOk,plOk,wOk,triggered,severity});
+  // Alter-Rater inspired model (Mediterranean validated)
+  // Infection requires: T 12.5-28°C + pluie ≥ 2.5mm + humectation ≥ 2h
+  var T_MIN = 12.5, T_MAX = 28.0, T_OPT = 26.0;
+  var PLUIE_SEUIL = 2.5;   // mm minimum
+  var WET_SEUIL   = 2.0;   // heures humectation minimum
+
+  var risk = { level: 0, label: 'Faible', days: 0, details: [] };
+  var check = Math.min(3, n);
+
+  for (var i = n - check; i < n; i++) {
+    var tmoy   = (tmaxs[i] + tmins[i]) / 2;
+    var pluie  = precips[i]  || 0;
+    var wet    = wetHours[i] || 0;
+    var hr     = humids[i]   || 0;
+
+    // Condition 1: T dans plage d'infection
+    var tOk  = tmoy >= T_MIN && tmoy <= T_MAX;
+    // Condition 2: pluie significative
+    var plOk = pluie >= PLUIE_SEUIL;
+    // Condition 3: humectation foliaire suffisante
+    var wOk  = wet >= WET_SEUIL;
+    var triggered = tOk && plOk && wOk;
+
+    // Severity index: proximity to T optimum (0-1)
+    var tScore = 0;
+    if (tOk) {
+      tScore = tmoy <= T_OPT
+        ? (tmoy - T_MIN) / (T_OPT - T_MIN)
+        : (T_MAX - tmoy) / (T_MAX - T_OPT);
+      tScore = Math.max(0, Math.min(1, tScore));
+    }
+    // Wetness bonus: more hours = higher risk
+    var wScore = triggered ? Math.min(1, wet / 12) : 0;
+    var severity = triggered ? Math.round((tScore * 0.6 + wScore * 0.4) * 100) : 0;
+
+    if (triggered) risk.days++;
+    risk.details.push({
+      tmoy: tmoy.toFixed(1), hr: Math.round(hr),
+      pluie: pluie.toFixed(1), wet: wet.toFixed(1),
+      tOk: tOk, plOk: plOk, wOk: wOk,
+      triggered: triggered, severity: severity
+    });
   }
-  const maxSev=risk.details.reduce((m,d)=>Math.max(m,d.severity),0);
-  if(risk.days>=2||maxSev>=75){risk.level=3;risk.label='ÉLEVÉ';}
-  else if(risk.days===1||maxSev>=40){risk.level=2;risk.label='MODÉRÉ';}
-  else{const partial=risk.details.filter(d=>d.tOk&&d.wOk).length;if(partial>=1){risk.level=1;risk.label='Surveillé';}}
+
+  // Risk level based on triggered days + severity
+  var maxSev = risk.details.reduce(function(m,d){ return Math.max(m, d.severity); }, 0);
+  if (risk.days >= 2 || maxSev >= 75)      { risk.level = 3; risk.label = 'ÉLEVÉ'; }
+  else if (risk.days === 1 || maxSev >= 40) { risk.level = 2; risk.label = 'MODÉRÉ'; }
+  else {
+    // Partial risk: T ok + wet ok but pluie insufficient
+    var partial = risk.details.filter(function(d){ return d.tOk && d.wOk; }).length;
+    if (partial >= 1) { risk.level = 1; risk.label = 'Surveillé'; }
+  }
   return risk;
 }
 
-// ── BUILD CARDS ──
 function buildCards(ddCumul) {
-  const grid=document.getElementById("cardsGrid");
-  grid.innerHTML="";
-  RAVAGEURS[currentCulture].forEach(r=>{
+  const grid = document.getElementById("cardsGrid");
+  grid.innerHTML = "";
+  RAVAGEURS[currentCulture].forEach(r => {
     let badge="", ddInfo="", dbar="";
-    const gColors=['#4caf50','#ff9800','#f44336'], gLabels=['G1','G2','G3'];
-    if(r.dd.length){
+    if(r.dd.length) {
       let g=0; r.dd.forEach((s,i)=>{if(ddCumul>=s)g=i+1;});
       const lbls=["Surveiller","G1 ACTIF","G2 ACTIF","G3 ACTIF"];
       const cls=["bw","bo","br","br"];
       badge=`<span class="badge ${cls[g]}">${lbls[g]}</span>`;
       ddInfo=`DD accumulés: <strong>${ddCumul}</strong>`;
-      const maxDD=r.dd[r.dd.length-1], pct=Math.min(100,(ddCumul/maxDD)*100);
+      const maxDD = r.dd[r.dd.length-1];
+      const pct=Math.min(100,(ddCumul/maxDD)*100);
+      const gColors=['#4caf50','#ff9800','#f44336'];
+      const gLabels=['G1','G2','G3'];
       let milestones='';
       r.dd.forEach((s,i)=>{
-        const mp=Math.min(99,(s/maxDD)*100), reached=ddCumul>=s;
-        milestones+=`<div class="ms" style="left:${mp}%"><div class="ms-pin" style="background:${reached?gColors[i]:'#ccc'}"></div><div class="ms-lbl" style="color:${reached?gColors[i]:'#aaa'};font-weight:${reached?'700':'400'}">${gLabels[i]}<br><span style="font-size:10px">${s}</span></div></div>`;
+        const mp=Math.min(99,(s/maxDD)*100);
+        const reached=ddCumul>=s;
+        milestones+=`<div class="ms" style="left:${mp}%">
+          <div class="ms-pin" style="background:${reached?gColors[i]:'#ccc'}"></div>
+          <div class="ms-lbl" style="color:${reached?gColors[i]:'#aaa'};font-weight:${reached?'700':'400'}">${gLabels[i]}<br><span style="font-size:10px">${s}</span></div>
+        </div>`;
       });
-      const fillColor=g===0?'#81c784':g===1?'#ffb74d':'#e57373';
-      const biofixLbl=currentCulture==='grenadier'?'15/03':'01/03';
+      const fillColor = g===0?'#81c784':g===1?'#ffb74d':'#e57373';
       dbar=`<div class="dbar">
         <div class="dbar-header">
-          <span style="font-size:11px;color:#888">Biofix ${biofixLbl}</span>
+          <span style="font-size:11px;color:#888">Biofix 01/03</span>
           <span style="font-size:12px;font-weight:700;color:#1a2e1a">${ddCumul} DD accumulés</span>
         </div>
         <div class="dbar-wrap">
-          <div class="dbar-bg"><div class="dbar-fill" style="width:${pct.toFixed(0)}%;background:${fillColor}"></div></div>
+          <div class="dbar-bg">
+            <div class="dbar-fill" style="width:${pct.toFixed(0)}%;background:${fillColor}"></div>
+          </div>
           ${milestones}
         </div>
         <div class="dbar-footer">
           ${r.dd.map((s,i)=>`<span class="dd-chip" style="background:${ddCumul>=s?gColors[i]+'22':'#f5f5f5'};color:${ddCumul>=s?gColors[i]:'#999'};border:1.5px solid ${ddCumul>=s?gColors[i]:'#e0e0e0'}">${gLabels[i]}: <strong>${s}</strong> DD ${ddCumul>=s?'✓':''}</span>`).join('')}
         </div>
       </div>`;
-      if(g>=1) sendAlertEmail(r.id, lbls[g], ddCumul, {
-        tmax: document.getElementById('wTmax').textContent,
-        tmin: document.getElementById('wTmin').textContent
-      });
     } else {
       badge=`<span class="badge bg">Surveillance visuelle</span>`;
       ddInfo="T° 12.5–28°C + Pluie ≥ 2.5mm + Humectation ≥ 2h";
     }
-
     const n=(ONSSA[r.id]||[]).length;
+    // Alternaria dynamic risk alert
+    let alternariaAlert = '';
+    if (r.id === 'Alternaria') {
+      const ar = window.alternariaRisk;
+      const colors = ['#388e3c','#f57c00','#e53935'];
+      const bgs = ['#e8f5e9','#fff3e0','#ffebee'];
+      const icons = ['🟢','🟡','🔴'];
+      const lvl = Math.max(0, ar.level - 1);
+      // Always show the 3 conditions clearly + risk level
+      const lastDay = ar ? ar.details[ar.details.length - 1] : null;
+      const tVal  = lastDay ? lastDay.tmoy  : '—';
+      const hrVal = lastDay ? lastDay.hr    : '—';
+      const plVal = lastDay ? lastDay.pluie : '—';
 
-    // Alternaria block
-    let alternariaAlert='';
-    if(r.id==='Alternaria'){
-      const ar=window.alternariaRisk;
-      const lastDay=ar?ar.details[ar.details.length-1]:null;
-      const tVal=lastDay?lastDay.tmoy:'—', plVal=lastDay?lastDay.pluie:'—', wetVal=lastDay?lastDay.wet:'—';
-      const consec=ar?ar.details.filter(d=>d.triggered).length:0;
-      const riskLevel=ar?ar.level:-1;
-      const riskColor=riskLevel>=3?'#c62828':riskLevel>=2?'#e65100':riskLevel===1?'#f9a825':'#2e7d32';
-      const riskBg=riskLevel>=3?'#ffebee':riskLevel>=2?'#fff3e0':riskLevel===1?'#fffde7':'#e8f5e9';
-      const riskIcon=riskLevel>=3?'🔴':riskLevel>=2?'🟠':riskLevel===1?'🟡':'🟢';
-      const riskLabel=riskLevel>=3?'ÉLEVÉ':riskLevel>=2?'MODÉRÉ':riskLevel===1?'Surveillé':ar?'Faible':'—';
-      const lastSev=lastDay?lastDay.severity:0;
-      const tOk2=lastDay?lastDay.tOk:false, plOk2=lastDay?lastDay.plOk:false, wOk2=lastDay?lastDay.wOk:false;
-      const sevColor=lastSev>=75?'#c62828':lastSev>=40?'#e65100':'#f9a825';
-      const row=(icon,label,val,unit,ok,note)=>
+      // Count consecutive days all 3 conditions met
+      const consec = ar ? ar.details.filter(d => d.triggered).length : 0;
+      const riskLevel = ar ? ar.level : -1;
+      const riskColor = riskLevel >= 3 ? '#c62828' : riskLevel >= 2 ? '#e65100' : riskLevel === 1 ? '#f9a825' : '#2e7d32';
+      const riskBg    = riskLevel >= 3 ? '#ffebee' : riskLevel >= 2 ? '#fff3e0' : riskLevel === 1 ? '#fffde7' : '#e8f5e9';
+      const riskIcon  = riskLevel >= 3 ? '🔴' : riskLevel >= 2 ? '🟠' : riskLevel === 1 ? '🟡' : '🟢';
+      const riskLabel = riskLevel >= 3 ? 'ÉLEVÉ' : riskLevel >= 2 ? 'MODÉRÉ' : riskLevel === 1 ? 'Surveillé' : ar ? 'Faible' : '—';
+
+      const lastSev = lastDay ? lastDay.severity : 0;
+      const wetVal  = lastDay ? lastDay.wet : '—';
+      const tOk2    = lastDay ? lastDay.tOk  : false;
+      const plOk2   = lastDay ? lastDay.plOk : false;
+      const wOk2    = lastDay ? lastDay.wOk  : false;
+
+      const row = (icon, label, val, unit, ok, note) =>
         `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #f0f0f0">
           <span style="font-size:11px;color:#555">${icon} ${label}<span style="color:#aaa;font-style:italic;margin-left:4px">${note||''}</span></span>
-          <span style="font-size:11px;font-weight:700;color:${ok===null?'#999':ok?'#2e7d32':'#c62828'}">${val!=='—'?val+unit:'—'} ${ok===null?'':ok?'✅':'❌'}</span>
+          <span style="font-size:11px;font-weight:700;color:${ok===null?'#999':ok?'#2e7d32':'#c62828'}">${val !== '—' ? val+unit : '—'} ${ok===null?'':ok?'✅':'❌'}</span>
         </div>`;
-      alternariaAlert=`
-        <div style="background:${riskBg};border:1px solid ${riskColor}44;border-radius:10px;padding:10px 12px;margin-top:8px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-            <span style="font-size:12px;font-weight:700;color:#333">🍂 Conditions d'infection</span>
-            <span style="font-size:11px;font-weight:700;color:${riskColor};background:white;padding:3px 10px;border-radius:12px;border:1px solid ${riskColor}">${riskIcon} ${riskLabel}</span>
-          </div>
-          ${row('🌡️','T° 12.5–28°C',tVal,'°C',lastDay?tOk2:null,'(opt. 26°C)')}
-          ${row('🌧️','Pluie ≥ 2.5mm',plVal,'mm',lastDay?plOk2:null,'')}
-          ${row('💧','Humectation ≥ 2h',wetVal,'h',lastDay?wOk2:null,'(heures pluie)')}
-          ${lastSev>0?`<div style="margin-top:8px">
-            <div style="display:flex;justify-content:space-between;font-size:10px;color:#888;margin-bottom:3px">
-              <span>Indice de sévérité (Alter-Rater)</span>
-              <span style="font-weight:700;color:${sevColor}">${lastSev}%</span>
-            </div>
-            <div style="background:#eee;border-radius:6px;height:6px">
-              <div style="background:${sevColor};width:${lastSev}%;height:6px;border-radius:6px;transition:width 0.4s"></div>
-            </div>
-          </div>`:''}
-          <div style="margin-top:6px;font-size:10px;color:#888">
-            ${ar?'<b>'+consec+'/'+ar.details.length+' jour(s)</b> avec conditions réunies (48h)':'⏳ En attente données météo…'}
-          </div>
-        </div>`;
-    }
 
+      // Severity bar width
+      const sevW = lastSev || 0;
+      const sevColor = sevW >= 75 ? '#c62828' : sevW >= 40 ? '#e65100' : '#f9a825';
+
+      alternariaAlert = `<div style="background:${riskBg};border:1px solid ${riskColor}44;border-radius:10px;padding:10px 12px;margin-top:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:12px;font-weight:700;color:#333">🍂 Conditions d'infection</span>
+          <span style="font-size:11px;font-weight:700;color:${riskColor};background:white;padding:3px 10px;border-radius:12px;border:1px solid ${riskColor}">${riskIcon} ${riskLabel}</span>
+        </div>
+        ${row('🌡️','T° 12.5–28°C', tVal, '°C', lastDay ? tOk2 : null, '(opt. 26°C)')}
+        ${row('🌧️','Pluie ≥ 2.5mm', plVal, 'mm', lastDay ? plOk2 : null, '')}
+        ${row('💧','Humectation ≥ 2h', wetVal, 'h', lastDay ? wOk2 : null, '(heures pluie)')}
+        ${lastSev > 0 ? `<div style="margin-top:8px">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:#888;margin-bottom:3px"><span>Indice de sévérité (Alter-Rater)</span><span style="font-weight:700;color:${sevColor}">${sevW}%</span></div>
+          <div style="background:#eee;border-radius:6px;height:6px"><div style="background:${sevColor};width:${sevW}%;height:6px;border-radius:6px;transition:width 0.4s"></div></div>
+        </div>` : ''}
+        <div style="margin-top:6px;font-size:10px;color:#888">
+          ${ar ? '<b>'+consec+'/'+ar.details.length+' jour(s)</b> avec conditions réunies (48h)' : '⏳ En attente données météo…'}
+        </div>
+      </div>`;
+    }
     const c=document.createElement("div");
     c.className='card';
-    if(r.id==='Alternaria'&&window.alternariaRisk){
-      if(window.alternariaRisk.level>=2){c.style.borderLeft='4px solid #e53935';c.style.boxShadow='0 2px 12px rgba(229,57,53,0.18)';}
-      else if(window.alternariaRisk.level===1){c.style.borderLeft='4px solid #f57c00';}
+    c.setAttribute('data-rav-id', r.id);
+    if (r.id === 'Alternaria' && window.alternariaRisk && window.alternariaRisk.level >= 2) {
+      c.style.borderLeft = '4px solid #e53935';
+      c.style.boxShadow = '0 2px 12px rgba(229,57,53,0.18)';
+    } else if (r.id === 'Alternaria' && window.alternariaRisk && window.alternariaRisk.level === 1) {
+      c.style.borderLeft = '4px solid #f57c00';
     }
+    // Compute bio badge
+
     c.innerHTML=`
       <div class="card-header">
         <span class="card-icon">${r.icon}</span>
@@ -417,25 +424,24 @@ function buildCards(ddCumul) {
           <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
             <button class="onssa-btn" onclick="showONSSA('${r.id}')">🏛️ Produits ONSSA (${n})</button>
           </div>
-          ${r.aux&&r.aux.length?`<div style="margin-top:4px"><button class="bio-open-btn" style="background:linear-gradient(135deg,#1b5e20,#388e3c);color:white;border:none;padding:4px 12px;border-radius:12px;font-size:10px;font-weight:700;cursor:pointer" onclick="showBio('${r.id}')">🐝 Biocontrôle</button></div>`:''}
+          ${r.aux && r.aux.length ? `<div style="margin-top:4px"><button class="bio-open-btn" style="background:linear-gradient(135deg,#1b5e20,#388e3c);color:white;border:none;padding:4px 12px;border-radius:12px;font-size:10px;font-weight:700;cursor:pointer">🐝 Biocontrôle</button></div>` : ''}
         </div>
       </div>
       <div class="card-body">
         <div class="sr"><span class="sl">Culture</span><span class="sv">${r.culture}</span></div>
         <div class="sr"><span class="sl">Organe cible</span><span class="sv">${r.organe}</span></div>
-        ${r.tbase?`<div class="sr"><span class="sl">T° base</span><span class="sv">${r.tbase}°C</span></div>`:''}
+        ${r.tbase ? `<div class="sr"><span class="sl">T° base</span><span class="sv">${r.tbase}°C</span></div>` : ''}
         <div class="sr"><span class="sl">Seuil</span><span class="sv">${r.seuil}</span></div>
         <div class="sr"><span class="sl">Stade actuel</span>${badge}</div>
-        <div class="sr"><span class="sl" style="font-size:11px;color:#aaa">${ddInfo}</span></div>
-        <div class="sr" style="align-items:flex-start"><span class="sl">Symptômes</span><span class="sv" style="font-size:13px;line-height:1.5;text-align:right;max-width:65%">${r.symp}</span></div>
+        <div class="sr"><span class="sl" style="font-size:11px;color:#ccc">${ddInfo}</span></div>
+        <div class="sr"><span class="sl">Symptômes</span><span class="sv" style="font-size:12px">${r.symp}</span></div>
         ${alternariaAlert}
       </div>${dbar}`;
     grid.appendChild(c);
   });
 }
 
-// ── ONSSA MODAL ──
-function showONSSA(key){
+function showONSSA(key) {
   const prods=ONSSA[key]||[];
   document.getElementById("onssa-title").textContent="🏛️ Produits homologués — "+key;
   const tb=document.getElementById("onssa-tbody"); tb.innerHTML="";
@@ -453,169 +459,588 @@ function showONSSA(key){
   });
   document.getElementById("onssa-modal").style.display="flex";
 }
-function closeONSSA(){document.getElementById("onssa-modal").style.display="none";}
+
+function closeONSSA() { document.getElementById("onssa-modal").style.display="none"; }
 document.getElementById("onssa-modal").addEventListener("click",function(e){if(e.target===this)closeONSSA();});
 
-// ── BIOCONTRÔLE (placeholder) ──
-function showBio(id){
-  const r=RAVAGEURS[currentCulture].find(x=>x.id===id);
-  if(!r||!r.aux)return;
-  let msg=`🐝 Biocontrôle — ${id}\n\n`;
-  r.aux.forEach(a=>{
-    msg+=`• ${a.nom}\n  Dose: ${a.doseBase} ${a.unite}\n  Dispo: ${a.dispo}\n  Délai: ${a.delai}j\n\n`;
-  });
-  alert(msg);
-}
+// ── Fetch DIRECTLY from Open-Meteo (works in any browser with internet) ──
+async function loadWeather() {
+  const selDate = document.getElementById("datePicker").value || new Date().toISOString().slice(0,10);
+  document.getElementById("wTmax").innerHTML = '<div class="spinner"></div>';
+  document.getElementById("wTmin").textContent = "—";
+  document.getElementById("wDDc").textContent = "—";
 
-// ── WEATHER ──
-async function loadWeather(){
-  const selDate=document.getElementById("datePicker").value||new Date().toISOString().slice(0,10);
-  document.getElementById("wTmax").innerHTML='<div class="spinner"></div>';
-  ["wTmin","wTmoy","wHR","wPluie","wDDj","wDDc","wJ"].forEach(id=>document.getElementById(id).textContent="—");
-  try{
-    const biofixStart=currentCulture==="grenadier"?CUR_YEAR+"-03-15":CUR_YEAR+"-03-01";
-    const url=`https://archive-api.open-meteo.com/v1/archive?latitude=${LAT}&longitude=${LON}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,relative_humidity_2m_mean,precipitation_hours&start_date=${biofixStart}&end_date=${selDate}&timezone=Africa/Casablanca`;
-    const res=await fetch(url); if(!res.ok)throw new Error("HTTP "+res.status);
-    const data=await res.json();
-    const tmaxs=data.daily.temperature_2m_max, tmins=data.daily.temperature_2m_min;
-    const precips=data.daily.precipitation_sum||[], humids=data.daily.relative_humidity_2m_mean||[];
-    const wetHours=data.daily.precipitation_hours||[], dates=data.daily.time, n=dates.length;
-    let ddCumul=0;
-    for(let i=0;i<n;i++) ddCumul+=Math.max(0,(tmaxs[i]+tmins[i])/2-10);
-    const tmax=tmaxs[n-1], tmin=tmins[n-1];
-    const tmoy=((tmax+tmin)/2).toFixed(1), ddJ=Math.max(0,(tmax+tmin)/2-10).toFixed(1);
-    const biofix=currentCulture==="grenadier"?BIOFIX_GRENADIER:BIOFIX_AGRUMES;
-    const jours=Math.round((new Date(selDate)-biofix)/86400000)+1;
-    document.getElementById("wTmax").textContent=tmax.toFixed(1)+"°";
-    document.getElementById("wTmin").textContent=tmin.toFixed(1)+"°";
-    document.getElementById("wTmoy").textContent=tmoy+"°";
-    document.getElementById("wDDj").textContent=ddJ;
-    document.getElementById("wDDc").textContent=ddCumul.toFixed(1);
-    document.getElementById("wJ").textContent=jours;
-    document.getElementById("wHR").textContent=humids[n-1]?Math.round(humids[n-1])+'%':'—';
-    document.getElementById("wPluie").textContent=precips[n-1]!=null?precips[n-1].toFixed(1):'—';
-    document.getElementById("srcTag").textContent="Open-Meteo · "+dates[n-1];
-    const bl=document.getElementById("biofixLabel"); if(bl)bl.textContent=currentCulture==="grenadier"?"15/03":"01/03";
+  try {
+    const biofixStart = currentCulture === "grenadier" ? CUR_YEAR+"-03-15" : CUR_YEAR+"-03-01";
+    const archiveUrl = `https://archive-api.open-meteo.com/v1/archive?latitude=${LAT}&longitude=${LON}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,relative_humidity_2m_mean,precipitation_hours&start_date=${biofixStart}&end_date=${selDate}&timezone=Africa/Casablanca`;
+
+    const r = await fetch(archiveUrl);
+    if(!r.ok) throw new Error("HTTP " + r.status);
+    const data = await r.json();
+
+    const tmaxs = data.daily.temperature_2m_max;
+    const tmins = data.daily.temperature_2m_min;
+    const precips  = data.daily.precipitation_sum || [];
+    const humids   = data.daily.relative_humidity_2m_mean || [];
+    const wetHours = data.daily.precipitation_hours || [];
+    const dates = data.daily.time;
+    const n = dates.length;
+
+    let ddCumul = 0;
+    for(let i=0;i<n;i++) {
+      ddCumul += Math.max(0, (tmaxs[i]+tmins[i])/2 - 10);
+    }
+
+    const tmax = tmaxs[n-1], tmin = tmins[n-1];
+    const tmoy = ((tmax+tmin)/2).toFixed(1);
+    const ddJ  = Math.max(0,(tmax+tmin)/2-10).toFixed(1);
+    const biofix = currentCulture === "grenadier" ? BIOFIX_GRENADIER : BIOFIX_AGRUMES;
+    const jours = Math.round((new Date(selDate)-biofix)/86400000)+1;
+
+    document.getElementById("wTmax").textContent = tmax.toFixed(1)+"°";
+    document.getElementById("wTmin").textContent = tmin.toFixed(1)+"°";
+    document.getElementById("wTmoy").textContent = tmoy+"°";
+    document.getElementById("wDDj").textContent  = ddJ;
+    document.getElementById("wDDc").textContent  = ddCumul.toFixed(1);
+    document.getElementById("wJ").textContent = jours;
+    const biofixUsed = currentCulture === "grenadier" ? "15/03" : "01/03";
+    const biofixLabelEl = document.getElementById("biofixLabel");
+    if (biofixLabelEl) biofixLabelEl.textContent = biofixUsed;
+    document.getElementById("wHR").textContent    = humids[n-1] ? Math.round(humids[n-1])+'%' : '—';
+    document.getElementById("wPluie").textContent = precips[n-1] != null ? precips[n-1].toFixed(1) : '—';
+    document.getElementById("srcTag").textContent = "Open-Meteo · "+dates[n-1];
     setDate(selDate);
-    window.alternariaRisk=computeAlternariaRisk(tmaxs,tmins,humids,precips,wetHours,n);
-    if(window.checkAlternariaAlert)window.checkAlternariaAlert();
+
+    // Compute Alternaria risk — Alter-Rater model (T 12.5–28°C + pluie ≥2.5mm + humectation ≥2h)
+    window.alternariaRisk = computeAlternariaRisk(tmaxs, tmins, humids, precips, wetHours, n);
+    if (window.checkAlternariaAlert) window.checkAlternariaAlert();
+
     buildCards(parseFloat(ddCumul.toFixed(1)));
-  }catch(e){
-    document.getElementById("wTmax").textContent="—";
-    document.getElementById("srcTag").textContent="❌ "+e.message+" — Vérifiez votre connexion";
+
+  } catch(e) {
+    document.getElementById("wTmax").textContent = "—";
     console.error(e);
-    const biofix=currentCulture==="grenadier"?BIOFIX_GRENADIER:BIOFIX_AGRUMES;
-    const jours=Math.round((new Date(document.getElementById("datePicker").value)-biofix)/86400000)+1;
-    window.alternariaRisk=null;
-    buildCards(Math.round(jours*4.5));
+    // Show error inline instead of alert
+    document.getElementById("srcTag").textContent = "❌ " + e.message + " — Vérifiez votre connexion";
+    // Still build cards with estimate
+    const biofix = currentCulture === "grenadier" ? BIOFIX_GRENADIER : BIOFIX_AGRUMES;
+    const jours = Math.round((new Date(selDate)-biofix)/86400000)+1;
+    const estDD = Math.round(jours * 4.5);
+    window.alternariaRisk = null;
+    buildCards(estDD);
   }
 }
 
-// ── EMAIL FUNCTIONS ──
-function toggleEmailSettings(){
-  const m=document.getElementById('emailModal');
-  m.style.display=m.style.display==='flex'?'none':'flex';
+// Init
+const todayStr = new Date().toISOString().slice(0,10);
+document.getElementById("datePicker").value = todayStr;
+document.getElementById("datePicker").max = todayStr;
+loadWeather();
+</script>
+
+<!-- Email Alert Settings Modal -->
+<div id="emailModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center">
+  <div style="background:white;border-radius:16px;padding:28px;max-width:420px;width:90%;
+    box-shadow:0 20px 60px rgba(0,0,0,0.3)">
+    <h3 style="color:#1a5c2a;margin-bottom:16px;font-size:18px">📧 Alertes Email</h3>
+    <label style="display:block;margin-bottom:8px;font-size:13px;color:#555;font-weight:600">
+      Emails destinataires
+    </label>
+    <div id="emailList" style="margin-bottom:8px;display:flex;flex-direction:column;gap:6px">
+      <div class="email-row" style="display:flex;gap:6px;align-items:center">
+        <input type="email" class="email-input" value="omarmflh3@gmail.com"
+          style="flex:1;padding:9px;border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none"
+          placeholder="email@gmail.com"/>
+        <button onclick="removeEmail(this)" style="background:#ffebee;border:none;color:#c62828;
+          width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:16px;flex-shrink:0">×</button>
+      </div>
+    </div>
+    <button onclick="addEmailField()" style="width:100%;background:#e8f5e9;color:#1a5c2a;
+      border:1px dashed #a5d6a7;padding:8px;border-radius:8px;cursor:pointer;
+      font-size:13px;margin-bottom:16px">
+      ➕ Ajouter un email
+    </button>
+    <label style="display:block;margin-bottom:8px;font-size:13px;color:#555;font-weight:600">
+      Envoyer alertes pour
+    </label>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px" id="alertCheckboxes">
+      <label style="display:flex;align-items:center;gap:4px;font-size:12px;background:#f0f4f0;padding:6px 10px;border-radius:20px;cursor:pointer">
+        <input type="checkbox" checked value="Acariens"> 🕷️ Acariens
+      </label>
+      <label style="display:flex;align-items:center;gap:4px;font-size:12px;background:#f0f4f0;padding:6px 10px;border-radius:20px;cursor:pointer">
+        <input type="checkbox" checked value="Thrips"> 🦗 Thrips
+      </label>
+      <label style="display:flex;align-items:center;gap:4px;font-size:12px;background:#f0f4f0;padding:6px 10px;border-radius:20px;cursor:pointer">
+        <input type="checkbox" checked value="Cochenilles"> 🔴 Cochenilles
+      </label>
+      <label style="display:flex;align-items:center;gap:4px;font-size:12px;background:#f0f4f0;padding:6px 10px;border-radius:20px;cursor:pointer">
+        <input type="checkbox" checked value="Ceratitis"> 🦟 Ceratitis
+      </label>
+      <label style="display:flex;align-items:center;gap:4px;font-size:12px;background:#f0f4f0;padding:6px 10px;border-radius:20px;cursor:pointer">
+        <input type="checkbox" checked value="Escargots"> 🐌 Escargots
+      </label>
+      <label style="display:flex;align-items:center;gap:4px;font-size:12px;background:#f0f4f0;padding:6px 10px;border-radius:20px;cursor:pointer">
+        <input type="checkbox" checked value="Pyrale"> 🦋 Pyrale
+      </label>
+      <label style="display:flex;align-items:center;gap:4px;font-size:12px;background:#f0f4f0;padding:6px 10px;border-radius:20px;cursor:pointer">
+        <input type="checkbox" checked value="Alternaria"> 🍂 Alternaria
+      </label>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button onclick="saveEmailSettings()" style="flex:1;background:#1a5c2a;color:white;
+        border:none;padding:11px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600">
+        ✅ Enregistrer
+      </button>
+      <button onclick="toggleEmailSettings()" style="flex:1;background:#eee;color:#333;
+        border:none;padding:11px;border-radius:8px;cursor:pointer;font-size:14px">
+        Annuler
+      </button>
+    </div>
+    <p id="emailTestStatus" style="margin-top:12px;font-size:12px;color:#888;text-align:center"></p>
+    <button onclick="sendTestEmail()" style="margin-top:8px;width:100%;background:#e8f5e9;
+      color:#1a5c2a;border:1px solid #c8e6c9;padding:9px;border-radius:8px;
+      cursor:pointer;font-size:13px">
+      🧪 Envoyer email de test
+    </button>
+  </div>
+</div>
+
+<script>
+// EmailJS init
+emailjs.init("sxNngSWsCpGpwCwOV");
+
+const EMAILJS_SERVICE = "service_xvvr17w";
+const EMAILJS_TEMPLATE = "template_lbtj5sq";
+
+// Track which alerts already sent (avoid spam)
+const alertsSent = {};
+
+function toggleEmailSettings() {
+  const modal = document.getElementById('emailModal');
+  modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
 }
 
-function addEmailField(){
-  const row=document.createElement('div');
-  row.className='email-row';
-  row.style.cssText='display:flex;gap:6px;align-items:center';
-  row.innerHTML=`<input type="email" class="email-input"
-    style="flex:1;padding:9px;border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none"
-    placeholder="email@gmail.com"/>
-    <button onclick="removeEmail(this)" style="background:#ffebee;border:none;color:#c62828;
-    width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:16px;flex-shrink:0">×</button>`;
+function addEmailField() {
+  const row = document.createElement('div');
+  row.className = 'email-row';
+  row.style.cssText = 'display:flex;gap:6px;align-items:center';
+  row.innerHTML = `<input type="email" class="email-input" style="flex:1;padding:9px;border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none" placeholder="email@gmail.com"/>
+    <button onclick="removeEmail(this)" style="background:#ffebee;border:none;color:#c62828;width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:16px;flex-shrink:0">×</button>`;
   document.getElementById('emailList').appendChild(row);
 }
 
-function removeEmail(btn){
-  if(document.querySelectorAll('.email-row').length>1) btn.closest('.email-row').remove();
+function removeEmail(btn) {
+  const rows = document.querySelectorAll('.email-row');
+  if (rows.length > 1) btn.parentElement.remove();
+  else showToast('⚠️ Minimum 1 email requis');
 }
 
-function saveEmailSettings(){
-  const emails=[...document.querySelectorAll('.email-input')].map(i=>i.value.trim()).filter(Boolean);
-  const ravs=[...document.querySelectorAll('#alertCheckboxes input:checked')].map(i=>i.value);
-  localStorage.setItem('arbopest_emails',JSON.stringify(emails));
-  localStorage.setItem('arbopest_ravs',JSON.stringify(ravs));
-  document.getElementById('emailModal').style.display='none';
-  alert('✅ Alertes sauvegardées pour : '+emails.join(', '));
+function saveEmailSettings() {
+  const inputs = document.querySelectorAll('.email-input');
+  const emails = Array.from(inputs).map(i => i.value.trim()).filter(e => e.includes('@'));
+  if (emails.length === 0) { showToast('⚠️ Aucun email valide'); return; }
+  const checkboxes = document.querySelectorAll('#alertCheckboxes input[type=checkbox]');
+  const selected = Array.from(checkboxes).filter(c => c.checked).map(c => c.value);
+  localStorage.setItem('alertEmails', JSON.stringify(emails));
+  localStorage.setItem('alertRavageurs', JSON.stringify(selected));
+  toggleEmailSettings();
+  showToast('✅ ' + emails.length + ' email(s) enregistré(s) !');
 }
 
-function testEmail(){
-  const emails=[...document.querySelectorAll('.email-input')].map(i=>i.value.trim()).filter(Boolean);
-  if(!emails.length){alert('⚠️ Ajoutez au moins un email !');return;}
-  emailjs.send('service_xvvr17w','template_lbtj5sq',{
-    to_email: emails.join(','),
-    ravageur: '🧪 TEST',
-    stade: 'Test de connexion EmailJS',
-    dd_cumul: '—',
-    tmax: document.getElementById('wTmax').textContent||'—',
-    tmin: document.getElementById('wTmin').textContent||'—',
+function loadEmailSettings() {
+  const emails = localStorage.getItem('alertEmails');
+  const ravageurs = localStorage.getItem('alertRavageurs');
+  if (emails) {
+    const arr = JSON.parse(emails);
+    const list = document.getElementById('emailList');
+    list.innerHTML = '';
+    arr.forEach(email => {
+      const row = document.createElement('div');
+      row.className = 'email-row';
+      row.style.cssText = 'display:flex;gap:6px;align-items:center';
+      row.innerHTML = `<input type="email" class="email-input" value="${email}" style="flex:1;padding:9px;border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none"/>
+        <button onclick="removeEmail(this)" style="background:#ffebee;border:none;color:#c62828;width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:16px;flex-shrink:0">×</button>`;
+      list.appendChild(row);
+    });
+  }
+  if (ravageurs) {
+    const selected = JSON.parse(ravageurs);
+    document.querySelectorAll('#alertCheckboxes input[type=checkbox]').forEach(cb => {
+      cb.checked = selected.includes(cb.value);
+    });
+  }
+}
+
+function getAlertEmails() {
+  const stored = localStorage.getItem('alertEmails');
+  return stored ? JSON.parse(stored) : ['omarmflh3@gmail.com'];
+}
+
+function getAlertRavageurs() {
+  const stored = localStorage.getItem('alertRavageurs');
+  return stored ? JSON.parse(stored) : ['Acariens','Thrips','Cochenilles','Ceratitis','Escargots','Pyrale','Alternaria'];
+}
+
+function sendAlertEmail(ravageur, generation, ddCumules, seuil, action) {
+  const alertKey = ravageur + '_' + generation;
+  if (alertsSent[alertKey]) return; // Already sent this session
+
+  const enabledRavageurs = getAlertRavageurs();
+  if (!enabledRavageurs.includes(ravageur)) return;
+
+  const templateParams = {
+    ravageur: ravageur,
+    generation: generation,
+    dd_cumules: ddCumules,
+    seuil: seuil,
     date: new Date().toLocaleDateString('fr-FR'),
-    localite: 'Ouled Gnaou',
-    culture: currentCulture==='grenadier'?'Grenadier':'Agrumes'
-  }).then(()=>{
-    alert('✅ Email de test envoyé avec succès à : '+emails.join(', '));
-  }).catch(err=>{
-    alert('❌ Échec EmailJS : '+(err.text||JSON.stringify(err)));
+    action: action,
+    to_email: getAlertEmail()
+  };
+
+  const emails = getAlertEmails();
+  let sent = 0;
+  emails.forEach(email => {
+    const params = {...templateParams, to_email: email};
+    emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, params)
+      .then(() => {
+        sent++;
+        if (sent === 1) {
+          alertsSent[alertKey] = true;
+          showToast('📧 Alerte envoyée à ' + emails.length + ' destinataire(s) : ' + ravageur + ' ' + generation);
+        }
+      })
+      .catch(err => console.log('EmailJS error:', err));
   });
 }
 
-function sendAlertEmail(ravageur, stade, ddCumul, meteo){
-  const emails=JSON.parse(localStorage.getItem('arbopest_emails')||'["omarmflh3@gmail.com"]');
-  const enabled=JSON.parse(localStorage.getItem('arbopest_ravs')||'[]');
-  if(enabled.length&&!enabled.includes(ravageur))return;
-  const key='sent_'+ravageur+'_'+new Date().toISOString().slice(0,10);
-  if(localStorage.getItem(key))return;
-  localStorage.setItem(key,'1');
-  emailjs.send('service_xvvr17w','template_lbtj5sq',{
-    to_email: emails.join(','),
-    ravageur, stade,
-    dd_cumul: ddCumul,
-    tmax: meteo.tmax,
-    tmin: meteo.tmin,
+function sendTestEmail() {
+  const status = document.getElementById('emailTestStatus');
+  status.textContent = '⏳ Envoi en cours...';
+  const templateParams = {
+    ravageur: 'TEST — Ceratitis capitata',
+    generation: 'G1',
+    dd_cumules: '373',
+    seuil: '4 mouches/piège/jour',
     date: new Date().toLocaleDateString('fr-FR'),
-    localite: 'Ouled Gnaou',
-    culture: currentCulture==='grenadier'?'Grenadier':'Agrumes'
-  }).then(()=>console.log('✅ Alerte email envoyée: '+ravageur))
-    .catch(err=>console.error('❌ EmailJS erreur:',err.text||err));
+    action: 'Vérifier pièges Tephri-trap et inspecter fruits',
+    to_email: getAlertEmail()
+  };
+  const testEmails = getAlertEmails();
+  let testSent = 0;
+  testEmails.forEach(email => {
+    const params = {...templateParams, to_email: email};
+    emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, params)
+      .then(() => { testSent++; status.textContent = '✅ Email de test envoyé à ' + testSent + '/' + testEmails.length + ' destinataire(s)'; status.style.color='#1a5c2a'; })
+      .catch(() => { status.textContent = '❌ Erreur — vérifiez vos clés EmailJS'; status.style.color='red'; });
+  });
 }
 
-window.checkAlternariaAlert=function(){
-  const ar=window.alternariaRisk;
-  if(ar&&ar.level>=2){
-    sendAlertEmail('Alternaria','Risque '+ar.label,'—',{
-      tmax:document.getElementById('wTmax').textContent,
-      tmin:document.getElementById('wTmin').textContent
-    });
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a5c2a;color:white;padding:12px 24px;border-radius:24px;font-size:14px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);transition:opacity 0.3s';
+    document.body.appendChild(t);
   }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  setTimeout(() => { t.style.opacity = '0'; }, 3500);
+}
+
+// Hook into existing DD calculation to trigger alerts
+// We patch the render function to check thresholds after update
+const _origRender = window.renderRavageurs;
+function checkAndSendAlerts(ddCumules) {
+  const all = [...RAVAGEURS.agrumes, ...RAVAGEURS.grenadier];
+  all.forEach(r => {
+    if (!r.dd || r.dd.length === 0) return;
+    const gens = [{'g':'G1','seuil':r.dd[0]},{'g':'G2','seuil':r.dd[1]},{'g':'G3','seuil':r.dd[2]}];
+    gens.forEach(gen => {
+      if (ddCumules >= gen.seuil && ddCumules < gen.seuil + 50) {
+        sendAlertEmail(r.id, gen.g, Math.round(ddCumules), r.seuil, 
+          'Seuil DD ' + gen.g + ' atteint (' + gen.seuil + ' DD) — intervenir selon protocole IPM');
+      }
+    });
+  });
+}
+
+// Load settings on startup
+window.addEventListener('load', () => { loadEmailSettings(); });
+
+// Expose checkAndSendAlerts globally so it can be called after DD update
+window.checkAndSendAlerts = checkAndSendAlerts;
+
+// Alternaria risk email alert
+window.checkAlternariaAlert = function() {
+  const ar = window.alternariaRisk;
+  if (!ar || ar.level < 2) return;
+  const enabledRavs = getAlertRavageurs();
+  if (!enabledRavs.includes('Alternaria')) return;
+  const alertKey = 'Alternaria_risque_' + ar.label;
+  if (alertsSent[alertKey]) return;
+  alertsSent[alertKey] = true;
+  const action = ar.level === 3
+    ? 'Traitement préventif URGENT: Trichoderma harzianum ou Bacillus subtilis'
+    : 'Surveiller et appliquer Trichoderma harzianum en préventif';
+  sendAlertEmail('Alternaria', 'Risque ' + ar.label, '—', 'T° 12.5–28°C + Pluie ≥2.5mm + Humectation ≥2h', action);
+};
+</script>
+
+
+<!-- ===== BIO MODAL ===== -->
+<div id="bioModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.65);z-index:9999;overflow-y:auto">
+  <div style="background:white;border-radius:16px;max-width:680px;width:94%;margin:24px auto 40px;box-shadow:0 24px 64px rgba(0,0,0,0.4)">
+    <!-- Header -->
+    <div id="bm-header" style="background:linear-gradient(135deg,#1a5c2a,#388e3c);padding:18px 20px;border-radius:16px 16px 0 0;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div id="bm-icon" style="font-size:26px"></div>
+        <div id="bm-title" style="color:white;font-size:17px;font-weight:700;margin-top:2px"></div>
+        <div id="bm-sci" style="color:rgba(255,255,255,0.72);font-size:11px;font-style:italic"></div>
+      </div>
+      <button onclick="document.getElementById('bioModal').style.display='none'" style="background:rgba(255,255,255,0.18);border:none;color:white;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1">✕</button>
+    </div>
+    <!-- Tabs -->
+    <div style="display:flex;border-bottom:2px solid #e8f5e9;background:#f9fbe7">
+      <button id="bmTab0" onclick="setBmTab(0)" style="flex:1;padding:11px 4px;border:none;background:transparent;cursor:pointer;font-size:12px;font-weight:700;color:#1a5c2a;border-bottom:3px solid #1a5c2a">🌡️ Fenêtre lâcher</button>
+      <button id="bmTab1" onclick="setBmTab(1)" style="flex:1;padding:11px 4px;border:none;background:transparent;cursor:pointer;font-size:12px;color:#888;border-bottom:3px solid transparent">⏳ Délai réentrée</button>
+      <button id="bmTab2" onclick="setBmTab(2)" style="flex:1;padding:11px 4px;border:none;background:transparent;cursor:pointer;font-size:12px;color:#888;border-bottom:3px solid transparent">🧮 Calculateur dose</button>
+    </div>
+    <!-- Body -->
+    <div id="bm-body" style="padding:18px;max-height:70vh;overflow-y:auto"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+var BM_RAV = null, BM_TAB = 0;
+
+// Treatment state (shared)
+var lastTreatDate = '', treatDelay = 14, surface = 1, doseUsed = 0, doseRef = 0;
+
+function getRav() {
+  var all = [];
+  Object.values(window.RAVAGEURS || {}).forEach(function(arr){ all = all.concat(arr); });
+  return all.find(function(r){ return r.id === BM_RAV; });
+}
+
+function getDaysLeft() {
+  if (!lastTreatDate) return null;
+  var elapsed = Math.floor((Date.now() - new Date(lastTreatDate)) / 86400000);
+  return treatDelay - elapsed;
+}
+
+function getDoseFactor() {
+  if (!doseRef || !doseUsed) return 1.0;
+  var pct = doseUsed / doseRef;
+  if (pct <= 0.5) return 1.0;
+  if (pct <= 1.0) return 1.5;
+  return 2.0;
+}
+
+window.openBioModal = function(ravId) {
+  BM_RAV = ravId; BM_TAB = 0;
+  var r = getRav();
+  if (!r) return;
+  document.getElementById('bm-icon').textContent = r.icon;
+  document.getElementById('bm-title').textContent = r.id;
+  document.getElementById('bm-sci').textContent = r.sci;
+  document.getElementById('bioModal').style.display = 'block';
+  renderTab();
 };
 
-// ── RESTORE SAVED PREFERENCES ──
-(function(){
-  const savedEmails=JSON.parse(localStorage.getItem('arbopest_emails')||'[]');
-  const savedRavs=JSON.parse(localStorage.getItem('arbopest_ravs')||'[]');
-  if(savedEmails.length){
-    const list=document.getElementById('emailList');
-    list.innerHTML='';
-    savedEmails.forEach(email=>{
-      addEmailField();
-      list.lastElementChild.querySelector('input').value=email;
-    });
-  }
-  if(savedRavs.length){
-    document.querySelectorAll('#alertCheckboxes input').forEach(cb=>{
-      cb.checked=savedRavs.includes(cb.value);
-    });
-  }
-})();
+window.setBmTab = function(t) {
+  BM_TAB = t;
+  [0,1,2].forEach(function(i){
+    var btn = document.getElementById('bmTab'+i);
+    btn.style.fontWeight = i===t ? '700' : '400';
+    btn.style.color = i===t ? '#1a5c2a' : '#888';
+    btn.style.borderBottom = i===t ? '3px solid #1a5c2a' : '3px solid transparent';
+  });
+  renderTab();
+};
 
-// ── INIT ──
-const todayStr=new Date().toISOString().slice(0,10);
-document.getElementById("datePicker").value=todayStr;
-document.getElementById("datePicker").max=todayStr;
-loadWeather();
+function renderTab() {
+  var r = getRav();
+  if (!r || !r.aux) return;
+  if (BM_TAB === 0) renderWindow(r);
+  else if (BM_TAB === 1) renderDelay(r);
+  else renderCalc(r);
+}
+
+// TAB 0: Fenetre lacher
+function renderWindow(r) {
+  var tNow = parseFloat(document.getElementById('wTmoy').textContent) || null;
+  var tMax = parseFloat(document.getElementById('wTmax').textContent) || null;
+  var tMin = parseFloat(document.getElementById('wTmin').textContent) || null;
+  var html = '<div style="background:#f1f8e9;border-radius:10px;padding:12px;margin-bottom:14px;font-size:12px;display:flex;gap:16px;flex-wrap:wrap">';
+  html += '<span>🌡️ T° moy: <b>' + (tNow !== null ? tNow+'°C' : '—') + '</b></span>';
+  html += '<span>⬆️ T° max: <b>' + (tMax !== null ? tMax+'°C' : '—') + '</b></span>';
+  html += '<span>⬇️ T° min: <b>' + (tMin !== null ? tMin+'°C' : '—') + '</b></span>';
+  html += '</div>';
+  r.aux.forEach(function(a) {
+    var ok = tNow !== null && tNow >= a.tmin && tNow <= a.tmax;
+    var cold = tNow !== null && tNow < a.tmin;
+    var hot = tNow !== null && tNow > a.tmax;
+    var color = tNow === null ? '#9e9e9e' : ok ? '#2e7d32' : '#c62828';
+    var icon = tNow === null ? '❓' : ok ? '✅' : cold ? '❄️' : '🔥';
+    var msg = tNow === null ? 'T° non disponible' : ok ? 'Conditions favorables — lâcher possible' : cold ? 'T° trop basse (min requis: '+a.tmin+'°C)' : 'T° trop haute (max requis: '+a.tmax+'°C)';
+    html += '<div style="border:1px solid #e0e0e0;border-left:4px solid '+color+';border-radius:8px;padding:12px;margin-bottom:10px">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">';
+    html += '<span style="font-size:13px;font-weight:700;color:#1a2e1a;font-style:italic">'+a.nom+'</span>';
+    html += '<span style="font-size:11px;font-weight:700;color:'+color+'">'+icon+' '+msg+'</span></div>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px">';
+    html += '<div style="background:#f5f5f5;padding:5px 8px;border-radius:6px">🌡️ Plage: <b>'+a.tmin+'–'+a.tmax+'°C</b></div>';
+    html += '<div style="background:#f5f5f5;padding:5px 8px;border-radius:6px">💧 HR min: <b>'+a.hrmin+'%</b></div>';
+    html += '<div style="background:#f5f5f5;padding:5px 8px;border-radius:6px;grid-column:1/-1">📦 '+a.dispo+'</div>';
+    html += '</div></div>';
+  });
+  document.getElementById('bm-body').innerHTML = html;
+}
+
+// TAB 1: Delai reentrée
+function renderDelay(r) {
+  var dl = getDaysLeft();
+  var statusHtml = '';
+  if (dl === null) {
+    statusHtml = '<div style="background:#fff8e1;border-radius:8px;padding:12px;text-align:center;color:#795548;font-size:13px">Entrez la date du dernier traitement ci-dessus</div>';
+  } else if (dl > 0) {
+    statusHtml = '<div style="background:#ffebee;border-radius:8px;padding:14px;text-align:center"><div style="font-size:28px font-weight:700;color:#c62828">⏳ '+dl+' jour'+(dl>1?'s':'')+' restant'+(dl>1?'s':''+'</div>')+'<div style="font-size:12px;color:#c62828;margin-top:4px">Aucun lâcher avant le <b>'+getUnlockDate(dl)+'</b></div></div>';
+  } else {
+    statusHtml = '<div style="background:#e8f5e9;border-radius:8px;padding:14px;text-align:center"><div style="font-size:22px;font-weight:700;color:#2e7d32">✅ Délai de sécurité respecté</div><div style="font-size:12px;color:#2e7d32;margin-top:4px">Lâcher autorisé (sous réserve des conditions météo)</div></div>';
+  }
+
+  var html = '<div style="margin-bottom:14px">';
+  html += '<label style="display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:5px">📅 Date du dernier traitement chimique</label>';
+  html += '<input type="date" id="bmLastDate" value="'+lastTreatDate+'" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:8px;font-size:13px;box-sizing:border-box" oninput="bmUpdateDelay()">';
+  html += '</div>';
+  html += '<div style="margin-bottom:14px">';
+  html += '<label style="display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:5px">🧪 Type de traitement</label>';
+  html += '<select id="bmTreatType" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:8px;font-size:13px" oninput="bmUpdateDelay()">';
+  html += '<option value="14" '+(treatDelay===14?'selected':'')+'>Acaricide / Insecticide — 14 jours</option>';
+  html += '<option value="21" '+(treatDelay===21?'selected':'')+'>Organophosphoré — 21 jours</option>';
+  html += '<option value="7" '+(treatDelay===7?'selected':'')+'>Huile / Savon / Soufre — 7 jours</option>';
+  html += '<option value="3" '+(treatDelay===3?'selected':'')+'>Cuivre / Bicarbonate — 3 jours</option>';
+  html += '</select></div>';
+  html += '<div id="bm-delay-status" style="margin-bottom:14px">'+statusHtml+'</div>';
+  html += '<div style="background:#e3f2fd;border-radius:8px;padding:10px;font-size:11px;color:#1565c0">💡 <b>Délai spécifique par auxiliaire :</b> ';
+  r.aux.forEach(function(a,i){ html += (i?', ':'') + a.nom.split(' ')[0]+': '+a.delai+'j'; });
+  html += '</div>';
+  document.getElementById('bm-body').innerHTML = html;
+}
+
+function getUnlockDate(daysLeft) {
+  var d = new Date(); d.setDate(d.getDate() + daysLeft);
+  return d.toLocaleDateString('fr-FR', {day:'numeric',month:'long'});
+}
+
+window.bmUpdateDelay = function() {
+  lastTreatDate = document.getElementById('bmLastDate').value;
+  treatDelay = parseInt(document.getElementById('bmTreatType').value);
+  var dl = getDaysLeft();
+  var statusHtml = '';
+  if (dl === null) {
+    statusHtml = '<div style="background:#fff8e1;border-radius:8px;padding:12px;text-align:center;color:#795548;font-size:13px">Entrez la date du dernier traitement</div>';
+  } else if (dl > 0) {
+    statusHtml = '<div style="background:#ffebee;border-radius:8px;padding:14px;text-align:center"><div style="font-size:22px;font-weight:700;color:#c62828">⏳ '+dl+' jour'+(dl>1?'s':'')+' restant'+(dl>1?'s':'')+'</div><div style="font-size:12px;color:#c62828;margin-top:4px">Lâcher possible à partir du <b>'+getUnlockDate(dl)+'</b></div></div>';
+  } else {
+    statusHtml = '<div style="background:#e8f5e9;border-radius:8px;padding:14px;text-align:center"><div style="font-size:22px;font-weight:700;color:#2e7d32">✅ Délai respecté — lâcher autorisé</div></div>';
+  }
+  document.getElementById('bm-delay-status').innerHTML = statusHtml;
+  // refresh badge on cards
+  var dd = parseFloat(document.getElementById('wDDc').textContent) || 0;
+  buildCards(dd);
+};
+
+// TAB 2: Calculateur dose
+function renderCalc(r) {
+  var factor = getDoseFactor();
+  var factorLabel = factor === 1.0 ? 'Standard (dose ≤ 50%)' : factor === 1.5 ? 'Renforcée (dose 50–100%)' : 'Curative (dose > 100%)';
+  var factorColor = factor === 1.0 ? '#2e7d32' : factor === 1.5 ? '#e65100' : '#c62828';
+
+  var html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">';
+  html += '<div><label style="display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:5px">🌿 Surface (ha)</label>';
+  html += '<input type="number" id="bmSurface" min="0.1" step="0.1" value="'+surface+'" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:8px;font-size:13px;box-sizing:border-box" oninput="bmCalcUpdate()"></div>';
+  html += '<div><label style="display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:5px">💧 Dose utilisée (L ou kg/ha)</label>';
+  html += '<input type="number" id="bmDoseUsed" min="0" step="0.01" value="'+doseUsed+'" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:8px;font-size:13px;box-sizing:border-box" oninput="bmCalcUpdate()"></div>';
+  html += '<div style="grid-column:1/-1"><label style="display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:5px">📋 Dose homologuée du produit (L ou kg/ha)</label>';
+  html += '<input type="number" id="bmDoseRef" min="0" step="0.01" value="'+doseRef+'" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:8px;font-size:13px;box-sizing:border-box" oninput="bmCalcUpdate()"></div>';
+  html += '</div>';
+
+  if (doseRef > 0 && doseUsed > 0) {
+    var pct = Math.round((doseUsed/doseRef)*100);
+    html += '<div style="background:#f3f3f3;border-radius:8px;padding:10px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center">';
+    html += '<span style="font-size:12px;color:#555">Dose utilisée : <b>'+pct+'%</b> de la dose homologuée</span>';
+    html += '<span style="font-size:11px;font-weight:700;color:'+factorColor+';background:white;padding:4px 10px;border-radius:12px">× '+factor+' — '+factorLabel+'</span>';
+    html += '</div>';
+  }
+
+  html += '<div id="bm-calc-results">';
+  var surf_m2 = surface * 10000;
+  r.aux.forEach(function(a) {
+    if (!a.doseBase) {
+      html += '<div style="border:1px solid #e0e0e0;border-radius:8px;padding:12px;margin-bottom:8px;background:#fafafa">';
+      html += '<div style="font-size:13px;font-weight:700;color:#1a2e1a;font-style:italic;margin-bottom:4px">'+a.nom+'</div>';
+      html += '<div style="font-size:12px;color:#888">Lâcher professionnel — contacter distributeur</div></div>';
+      return;
+    }
+    var totalDose = a.doseBase * factor;
+    var totalQty, sachetsNeeded, qtyLabel;
+    if (a.unite.includes('/m²')) {
+      totalQty = Math.ceil(totalDose * surf_m2);
+      var sachetSize = parseInt(a.sachet.replace(/[^0-9]/g,'')) || 500;
+      sachetsNeeded = Math.ceil(totalQty / sachetSize);
+      qtyLabel = totalQty.toLocaleString('fr-FR') + ' ' + a.unite.replace('/m²','') + ' (' + sachetsNeeded + ' sachets de ' + a.sachet + ')';
+    } else if (a.unite.includes('/ha')) {
+      totalQty = Math.ceil(totalDose * surface * factor);
+      sachetsNeeded = Math.ceil(totalQty / (parseInt(a.sachet) || 500000));
+      qtyLabel = totalQty.toLocaleString('fr-FR') + ' ' + a.unite.replace('/ha','') + ' (' + sachetsNeeded + ' cartes ' + a.sachet + ')';
+    } else if (a.unite.includes('L/arbre') || a.unite.includes('g/L')) {
+      totalQty = (totalDose * surface).toFixed(1);
+      qtyLabel = totalQty + ' ' + a.unite + ' × ' + surface + ' ha';
+    } else {
+      totalQty = Math.ceil(totalDose * surf_m2);
+      qtyLabel = totalQty.toLocaleString('fr-FR') + ' ' + a.unite;
+    }
+    var bcolor = factor === 1.0 ? '#e8f5e9' : factor === 1.5 ? '#fff3e0' : '#ffebee';
+    html += '<div style="border:1px solid #e0e0e0;border-left:4px solid '+factorColor+';border-radius:8px;padding:12px;margin-bottom:8px;background:'+bcolor+'">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">';
+    html += '<span style="font-size:13px;font-weight:700;color:#1a2e1a;font-style:italic">'+a.nom+'</span>';
+    html += '<span style="font-size:11px;background:white;padding:3px 8px;border-radius:10px;color:'+factorColor+';font-weight:700">× '+factor+'</span></div>';
+    html += '<div style="font-size:13px;font-weight:700;color:'+factorColor+';margin-bottom:4px">📦 '+qtyLabel+'</div>';
+    html += '<div style="font-size:11px;color:#666">Dose base: '+a.doseBase+' '+a.unite+' · Fournisseur: '+a.dispo+'</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+  html += '<div style="background:#e3f2fd;border-radius:8px;padding:10px;font-size:11px;color:#1565c0;margin-top:6px">💡 Surface: '+surface+' ha = '+surf_m2.toLocaleString('fr-FR')+' m². Facteur × '+factor+' basé sur % dose chimique utilisée.</div>';
+  document.getElementById('bm-body').innerHTML = html;
+}
+
+window.bmCalcUpdate = function() {
+  surface = parseFloat(document.getElementById('bmSurface').value) || 1;
+  doseUsed = parseFloat(document.getElementById('bmDoseUsed').value) || 0;
+  doseRef = parseFloat(document.getElementById('bmDoseRef').value) || 0;
+  var r = getRav();
+  if (r) renderCalc(r);
+};
+
+document.getElementById('bioModal').addEventListener('click', function(e){
+  if (e.target === this) this.style.display = 'none';
+});
+
+// Event delegation - catch clicks on bio button anywhere in cardsGrid
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('bio-open-btn')) {
+    var card = e.target.closest('[data-rav-id]');
+    if (card) window.openBioModal(card.getAttribute('data-rav-id'));
+  }
+});
+
+window.RAVAGEURS_BIO_READY = true;
+})();
 </script>
+
 </body>
 </html>
