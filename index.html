@@ -94,6 +94,13 @@ body{background:#f0f4f0;min-height:100vh}
 
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  window.addEventListener('load', function() {
+    emailjs.init({
+      publicKey: 'YOUR_PUBLIC_KEY'
+    });
+  });
+</script>
 </head>
 <body>
 
